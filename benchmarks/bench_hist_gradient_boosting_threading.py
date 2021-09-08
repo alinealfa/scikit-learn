@@ -115,15 +115,13 @@ sklearn_est = Estimator(
     verbose=0,
 )
 loss = args.loss
-if args.problem == "classification":
-    if loss == "default":
+if loss == "default":
+    if args.problem == "classification":
         # loss='auto' does not work with get_equivalent_estimator()
         loss = (
             "binary_crossentropy" if args.n_classes == 2 else "categorical_crossentropy"
         )
-else:
-    # regression
-    if loss == "default":
+    else:
         loss = "squared_error"
 sklearn_est.set_params(loss=loss)
 
@@ -335,8 +333,8 @@ if args.plot or args.plot_filename:
 
     plt.tight_layout()
 
-    if args.plot_filename:
-        plt.savefig(args.plot_filename)
+if args.plot_filename:
+    plt.savefig(args.plot_filename)
 
-    if args.plot:
-        plt.show()
+if args.plot:
+    plt.show()

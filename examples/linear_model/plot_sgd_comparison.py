@@ -7,6 +7,7 @@ An example showing how different online solvers perform
 on the hand-written digits dataset.
 
 """
+
 # Author: Rob Zinkov <rob at zinkov dot com>
 # License: BSD 3 clause
 
@@ -42,7 +43,7 @@ for name, clf in classifiers:
     yy = []
     for i in heldout:
         yy_ = []
-        for r in range(rounds):
+        for _ in range(rounds):
             X_train, X_test, y_train, y_test = \
                 train_test_split(X, y, test_size=i, random_state=rng)
             clf.fit(X_train, y_train)

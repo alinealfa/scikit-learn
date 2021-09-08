@@ -25,9 +25,7 @@ class TSNEBenchmark(Estimator, Benchmark):
     def make_estimator(self, params):
         (method,) = params
 
-        estimator = TSNE(random_state=0, method=method)
-
-        return estimator
+        return TSNE(random_state=0, method=method)
 
     def make_scorers(self):
         self.train_scorer = lambda _, __: self.estimator.kl_divergence_

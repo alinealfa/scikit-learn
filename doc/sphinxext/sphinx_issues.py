@@ -49,11 +49,7 @@ def user_role(name, rawtext, text, lineno, inliner, options=None, content=None):
         ref = config.issues_user_uri.format(user=target)
     else:
         ref = "https://github.com/{0}".format(target)
-    if has_explicit_title:
-        text = title
-    else:
-        text = "@{0}".format(target)
-
+    text = title if has_explicit_title else "@{0}".format(target)
     link = nodes.reference(text=text, refuri=ref, **options)
     return [link], []
 

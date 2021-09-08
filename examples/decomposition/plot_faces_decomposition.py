@@ -182,9 +182,7 @@ plot_gallery("First centered Olivetti faces", faces_centered[:n_components],
 for name, estimator, center in estimators:
     print("Extracting the top %d %s..." % (n_components, name))
     t0 = time()
-    data = faces
-    if center:
-        data = faces_centered
+    data = faces_centered if center else faces
     estimator.fit(data)
     train_time = (time() - t0)
     print("done in %0.3fs" % train_time)

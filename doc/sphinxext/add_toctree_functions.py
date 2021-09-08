@@ -80,13 +80,10 @@ def add_toctree_functions(app, pagename, templatename, context, doctree):
             if isinstance(item, docutils.nodes.list_item)
         ]
 
-        # Now convert our docutils nodes into dicts that Jinja can use
-        nav = [
+        return [
             docutils_node_to_jinja(child, only_pages=True, numbered=numbered)
             for child in toc_items
         ]
-
-        return nav
 
     context["get_nav_object"] = get_nav_object
 
@@ -133,15 +130,7 @@ def docutils_node_to_jinja(list_item, only_pages=False, numbered=False):
         return None
 
     # Converting the docutils attributes into jinja-friendly objects
-    nav = {}
-    nav["title"] = title
-    nav["url"] = url
-    nav["active"] = active
-
-    # Recursively convert children as well
-    # If there are sub-pages for this list_item, there should be two children:
-    # a paragraph, and a bullet_list.
-    nav["children"] = []
+    nav = {'title': title, 'url': url, 'active': active, 'children': []}
     if len(list_item.children) > 1:
         # The `.children` of the bullet_list has the nodes of the sub-pages.
         subpage_list = list_item.children[1].children

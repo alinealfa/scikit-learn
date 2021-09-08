@@ -22,9 +22,7 @@ class PCABenchmark(Transformer, Estimator, Benchmark):
     def make_estimator(self, params):
         (svd_solver,) = params
 
-        estimator = PCA(n_components=32, svd_solver=svd_solver, random_state=0)
-
-        return estimator
+        return PCA(n_components=32, svd_solver=svd_solver, random_state=0)
 
     def make_scorers(self):
         make_pca_scorers(self)
@@ -47,7 +45,7 @@ class DictionaryLearningBenchmark(Transformer, Estimator, Benchmark):
     def make_estimator(self, params):
         fit_algorithm, n_jobs = params
 
-        estimator = DictionaryLearning(
+        return DictionaryLearning(
             n_components=15,
             fit_algorithm=fit_algorithm,
             alpha=0.1,
@@ -56,8 +54,6 @@ class DictionaryLearningBenchmark(Transformer, Estimator, Benchmark):
             random_state=0,
             n_jobs=n_jobs,
         )
-
-        return estimator
 
     def make_scorers(self):
         make_dict_learning_scorers(self)
@@ -80,7 +76,7 @@ class MiniBatchDictionaryLearningBenchmark(Transformer, Estimator, Benchmark):
     def make_estimator(self, params):
         fit_algorithm, n_jobs = params
 
-        estimator = MiniBatchDictionaryLearning(
+        return MiniBatchDictionaryLearning(
             n_components=15,
             fit_algorithm=fit_algorithm,
             alpha=0.1,
@@ -88,8 +84,6 @@ class MiniBatchDictionaryLearningBenchmark(Transformer, Estimator, Benchmark):
             random_state=0,
             n_jobs=n_jobs,
         )
-
-        return estimator
 
     def make_scorers(self):
         make_dict_learning_scorers(self)

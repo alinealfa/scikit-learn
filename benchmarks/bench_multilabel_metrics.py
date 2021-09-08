@@ -193,10 +193,7 @@ if __name__ == "__main__":
 
     if args.plot is not None:
         max_val = getattr(args, args.plot)
-        if args.plot in ("classes", "samples"):
-            min_val = 2
-        else:
-            min_val = 0
+        min_val = 2 if args.plot in ("classes", "samples") else 0
         steps = np.linspace(min_val, max_val, num=args.n_steps + 1)[1:]
         if args.plot in ("classes", "samples"):
             steps = np.unique(np.round(steps).astype(int))

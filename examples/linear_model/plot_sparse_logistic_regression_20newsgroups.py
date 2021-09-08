@@ -18,6 +18,7 @@ A more traditional (and possibly better) way to predict on a sparse subset of
 input features would be to use univariate feature selection followed by a
 traditional (l2-penalised) logistic regression model.
 """
+
 import timeit
 import warnings
 
@@ -59,13 +60,11 @@ print('Dataset 20newsgroup, train_samples=%i, n_features=%i, n_classes=%i'
 models = {'ovr': {'name': 'One versus Rest', 'iters': [1, 2, 4]},
           'multinomial': {'name': 'Multinomial', 'iters': [1, 3, 7]}}
 
-for model in models:
+for model, model_params in models.items():
     # Add initial chance-level values for plotting purpose
     accuracies = [1 / n_classes]
     times = [0]
     densities = [1]
-
-    model_params = models[model]
 
     # Small number of epochs for fast runtime
     for this_max_iter in model_params['iters']:

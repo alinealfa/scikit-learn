@@ -115,10 +115,9 @@ regressor = RandomForestRegressor(random_state=0)
 
 def get_scores_for_imputer(imputer, X_missing, y_missing):
     estimator = make_pipeline(imputer, regressor)
-    impute_scores = cross_val_score(estimator, X_missing, y_missing,
+    return cross_val_score(estimator, X_missing, y_missing,
                                     scoring='neg_mean_squared_error',
                                     cv=N_SPLITS)
-    return impute_scores
 
 
 x_labels = []

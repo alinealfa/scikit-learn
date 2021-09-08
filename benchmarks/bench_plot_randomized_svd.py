@@ -286,7 +286,6 @@ def svd_timing(
             random_state=random_state,
             transpose=False,
         )
-        call_time = time() - t0
     else:
         gc.collect()
         t0 = time()
@@ -294,8 +293,7 @@ def svd_timing(
         U, mu, V = fbpca.pca(
             X, n_comps, raw=True, n_iter=n_iter, l=n_oversamples + n_comps
         )
-        call_time = time() - t0
-
+    call_time = time() - t0
     return U, mu, V, call_time
 
 
@@ -309,16 +307,16 @@ def norm_diff(A, norm=2, msg=True, random_state=None):
 
     if msg:
         print("... computing %s norm ..." % norm)
-    if norm == 2:
-        # s = sp.linalg.norm(A, ord=2)  # slow
-        v0 = _init_arpack_v0(min(A.shape), random_state)
-        value = sp.sparse.linalg.svds(A, k=1, return_singular_vectors=False, v0=v0)
-    else:
-        if sp.sparse.issparse(A):
-            value = sp.sparse.linalg.norm(A, ord=norm)
-        else:
-            value = sp.linalg.norm(A, ord=norm)
-    return value
+    if norm != 2:
+        return (
+            sp.sparse.linalg.norm(A, ord=norm)
+            if sp.sparse.issparse(A)
+            else sp.linalg.norm(A, ord=norm)
+        )
+
+    # s = sp.linalg.norm(A, ord=2)  # slow
+    v0 = _init_arpack_v0(min(A.shape), random_state)
+    return sp.sparse.linalg.svds(A, k=1, return_singular_vectors=False, v0=v0)
 
 
 def scalable_frobenius_norm_discrepancy(X, U, s, V):
@@ -484,7 +482,7 @@ def bench_c(datasets, n_comps):
             f = scalable_frobenius_norm_discrepancy(X, U, s, V)
             all_frobenius[label].append(f / X_fro_norm)
 
-    if len(all_time) == 0:
+    if not all_time:
         raise ValueError("No tests ran. Aborting.")
 
     if enable_spectral_norm:

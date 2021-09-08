@@ -146,10 +146,11 @@ models = [
     ("GBDT embedding -> LR", gbdt_model),
 ]
 
-model_displays = {}
-for name, pipeline in models:
-    model_displays[name] = plot_roc_curve(
-        pipeline, X_test, y_test, ax=ax, name=name)
+model_displays = {
+    name: plot_roc_curve(pipeline, X_test, y_test, ax=ax, name=name)
+    for name, pipeline in models
+}
+
 _ = ax.set_title('ROC curve')
 
 # %%

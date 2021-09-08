@@ -12,6 +12,7 @@ data-points are not linearly separable.
 
 
 """
+
 print(__doc__)
 
 
@@ -43,11 +44,8 @@ X = np.c_[(.4, -.7),
           (1.3, 2.1)].T
 Y = [0] * 8 + [1] * 8
 
-# figure number
-fignum = 1
-
 # fit the model
-for kernel in ('linear', 'poly', 'rbf'):
+for fignum, kernel in enumerate(('linear', 'poly', 'rbf'), start=1):
     clf = svm.SVC(kernel=kernel, gamma=2)
     clf.fit(X, Y)
 
@@ -81,5 +79,4 @@ for kernel in ('linear', 'poly', 'rbf'):
 
     plt.xticks(())
     plt.yticks(())
-    fignum = fignum + 1
 plt.show()

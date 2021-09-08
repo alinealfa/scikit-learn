@@ -82,8 +82,7 @@ class ReutersParser(HTMLParser):
         self.docs = []
         for chunk in fd:
             self.feed(chunk.decode(self.encoding))
-            for doc in self.docs:
-                yield doc
+            yield from self.docs
             self.docs = []
         self.close()
 
@@ -393,10 +392,11 @@ plt.show()
 
 # Plot prediction times
 plt.figure()
-cls_runtime = []
 cls_names = list(sorted(cls_stats.keys()))
-for cls_name, stats in sorted(cls_stats.items()):
-    cls_runtime.append(stats['prediction_time'])
+cls_runtime = [
+    stats['prediction_time'] for cls_name, stats in sorted(cls_stats.items())
+]
+
 cls_runtime.append(parsing_time)
 cls_names.append('Read/Parse\n+Feat.Extr.')
 cls_runtime.append(vectorizing_time)

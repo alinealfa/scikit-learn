@@ -73,9 +73,7 @@ def compute_bench_2(chunks):
     for i in range(8):
         X = np.r_[X, means[i] + 0.8 * np.random.randn(n_features, 2)]
     max_it = len(chunks)
-    it = 0
-    for chunk in chunks:
-        it += 1
+    for it, chunk in enumerate(chunks, start=1):
         print("==============================")
         print("Iteration %03d of %03d" % (it, max_it))
         print("==============================")
@@ -109,11 +107,15 @@ if __name__ == "__main__":
     results_2 = compute_bench_2(chunks)
 
     max_time = max(
-        [max(i) for i in [t for (label, t) in results.items() if "speed" in label]]
+        max(i)
+        for i in [t for (label, t) in results.items() if "speed" in label]
     )
+
     max_inertia = max(
-        [max(i) for i in [t for (label, t) in results.items() if "speed" not in label]]
+        max(i)
+        for i in [t for (label, t) in results.items() if "speed" not in label]
     )
+
 
     fig = plt.figure("scikit-learn K-Means benchmark results")
     for c, (label, timings) in zip("brcy", sorted(results.items())):
@@ -130,9 +132,7 @@ if __name__ == "__main__":
         ax.set_xlabel("n_samples")
         ax.set_ylabel("n_features")
 
-    i = 0
-    for c, (label, timings) in zip("br", sorted(results_2.items())):
-        i += 1
+    for i, (c, (label, timings)) in enumerate(zip("br", sorted(results_2.items())), start=1):
         ax = fig.add_subplot(2, 2, i + 2)
         y = np.asarray(timings)
         ax.plot(chunks, y, color=c, alpha=0.8)

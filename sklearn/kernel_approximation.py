@@ -124,7 +124,7 @@ class PolynomialCountSketch(BaseEstimator, TransformerMixin):
         self : object
             Returns the transformer.
         """
-        if not self.degree >= 1:
+        if self.degree < 1:
             raise ValueError(f"degree={self.degree} should be >=1.")
 
         X = self._validate_data(X, accept_sparse="csc")
@@ -199,9 +199,7 @@ class PolynomialCountSketch(BaseEstimator, TransformerMixin):
         # multiplication (via FFT) of p count sketches of x.
         count_sketches_fft = fft(count_sketches, axis=2, overwrite_x=True)
         count_sketches_fft_prod = np.prod(count_sketches_fft, axis=1)
-        data_sketch = np.real(ifft(count_sketches_fft_prod, overwrite_x=True))
-
-        return data_sketch
+        return np.real(ifft(count_sketches_fft_prod, overwrite_x=True))
 
 
 class RBFSampler(TransformerMixin, BaseEstimator):
@@ -867,17 +865,16 @@ class Nystroem(TransformerMixin, BaseEstimator):
             for param in KERNEL_PARAMS[self.kernel]:
                 if getattr(self, param) is not None:
                     params[param] = getattr(self, param)
-        else:
-            if (
+        elif (
                 self.gamma is not None
                 or self.coef0 is not None
                 or self.degree is not None
             ):
-                raise ValueError(
-                    "Don't pass gamma, coef0 or degree to "
-                    "Nystroem if using a callable "
-                    "or precomputed kernel"
-                )
+            raise ValueError(
+                "Don't pass gamma, coef0 or degree to "
+                "Nystroem if using a callable "
+                "or precomputed kernel"
+            )
 
         return params
 

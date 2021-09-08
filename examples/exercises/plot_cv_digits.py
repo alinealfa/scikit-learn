@@ -8,6 +8,7 @@ A tutorial exercise using Cross-validation with an SVM on the Digits dataset.
 This exercise is used in the :ref:`cv_generators_tut` part of the
 :ref:`model_selection_tut` section of the :ref:`stat_learn_tut_index`.
 """
+
 print(__doc__)
 
 
@@ -20,8 +21,8 @@ X, y = datasets.load_digits(return_X_y=True)
 svc = svm.SVC(kernel='linear')
 C_s = np.logspace(-10, 0, 10)
 
-scores = list()
-scores_std = list()
+scores = []
+scores_std = []
 for C in C_s:
     svc.C = C
     this_scores = cross_val_score(svc, X, y, n_jobs=1)

@@ -56,10 +56,7 @@ def _bistochastic_normalize(X, max_iter=1000, tol=1e-5):
     X_scaled = X
     for _ in range(max_iter):
         X_new, _, _ = _scale_normalize(X_scaled)
-        if issparse(X):
-            dist = norm(X_scaled.data - X.data)
-        else:
-            dist = norm(X_scaled - X_new)
+        dist = norm(X_scaled.data - X.data) if issparse(X) else norm(X_scaled - X_new)
         X_scaled = X_new
         if dist is not None and dist < tol:
             break

@@ -247,24 +247,23 @@ def ward_tree(X, *, connectivity=None, n_clusters=None, return_distance=False):
         out = hierarchy.ward(X)
         children_ = out[:, :2].astype(np.intp)
 
-        if return_distance:
-            distances = out[:, 2]
-            return children_, 1, n_samples, None, distances
-        else:
+        if not return_distance:
             return children_, 1, n_samples, None
 
+        distances = out[:, 2]
+        return children_, 1, n_samples, None, distances
     connectivity, n_connected_components = _fix_connectivity(
         X, connectivity, affinity="euclidean"
     )
     if n_clusters is None:
         n_nodes = 2 * n_samples - 1
+    elif n_clusters > n_samples:
+        raise ValueError(
+            "Cannot provide more clusters than samples. "
+            "%i n_clusters was asked, and there are %i "
+            "samples." % (n_clusters, n_samples)
+        )
     else:
-        if n_clusters > n_samples:
-            raise ValueError(
-                "Cannot provide more clusters than samples. "
-                "%i n_clusters was asked, and there are %i "
-                "samples." % (n_clusters, n_samples)
-            )
         n_nodes = 2 * n_samples - n_clusters
 
     # create inertia matrix
@@ -349,12 +348,12 @@ def ward_tree(X, *, connectivity=None, n_clusters=None, return_distance=False):
     children = [c[::-1] for c in children]
     children = np.array(children)  # return numpy array for efficient caching
 
-    if return_distance:
-        # 2 is scaling factor to compare w/ unstructured version
-        distances = np.sqrt(2.0 * distances)
-        return children, n_connected_components, n_leaves, parent, distances
-    else:
+    if not return_distance:
         return children, n_connected_components, n_leaves, parent
+
+    # 2 is scaling factor to compare w/ unstructured version
+    distances = np.sqrt(2.0 * distances)
+    return children, n_connected_components, n_leaves, parent, distances
 
 
 # single average and complete linkage
@@ -566,7 +565,7 @@ def linkage_tree(
         distances = np.empty(n_nodes - n_samples)
     # create inertia heap and connection matrix
     A = np.empty(n_nodes, dtype=object)
-    inertia = list()
+    inertia = []
 
     # LIL seems to the best format to access the rows quickly,
     # without the numpy overhead of slicing CSR indices and data.

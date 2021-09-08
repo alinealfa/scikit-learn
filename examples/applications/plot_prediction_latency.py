@@ -231,7 +231,7 @@ def benchmark_throughputs(configuration, duration_secs=0.1):
     X_train, y_train, X_test, y_test = generate_dataset(
         configuration['n_train'], configuration['n_test'],
         configuration['n_features'])
-    throughputs = dict()
+    throughputs = {}
     for estimator_config in configuration['estimators']:
         estimator_config['instance'].fit(X_train, y_train)
         start_time = time.time()

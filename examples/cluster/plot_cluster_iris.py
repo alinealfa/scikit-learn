@@ -16,6 +16,7 @@ The next plot displays what using eight clusters would deliver
 and finally the ground truth.
 
 """
+
 print(__doc__)
 
 
@@ -62,7 +63,7 @@ for name, est in estimators:
     ax.set_zlabel('Petal length')
     ax.set_title(titles[fignum - 1])
     ax.dist = 12
-    fignum = fignum + 1
+    fignum += 1
 
 # Plot the ground truth
 fig = plt.figure(fignum, figsize=(4, 3))

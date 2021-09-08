@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     results = compute_bench(samples_range, features_range)
 
-    max_time = max([max(i) for i in [t for (label, t) in results.items()]])
+    max_time = max(max(i) for i in [t for (label, t) in results.items()])
 
     colors = plt.get_cmap("tab10")(np.linspace(0, 1, 10))[:4]
     lines = {linkage: None for linkage in results.keys()}

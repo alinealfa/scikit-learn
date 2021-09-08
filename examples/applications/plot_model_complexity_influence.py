@@ -82,9 +82,8 @@ def generate_data(case):
     X_train, y_train = X[:offset], y[:offset]
     X_test, y_test = X[offset:], y[offset:]
 
-    data = {'X_train': X_train, 'X_test': X_test, 'y_train': y_train,
+    return {'X_train': X_train, 'X_test': X_test, 'y_train': y_train,
             'y_test': y_test}
-    return data
 
 
 regression_data = generate_data('regression')

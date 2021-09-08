@@ -91,8 +91,7 @@ if __name__ == "__main__":
     max_time = max(max(t) for t in results.values())
 
     fig = plt.figure("scikit-learn Lasso path benchmark results")
-    i = 1
-    for c, (label, timings) in zip("bcry", sorted(results.items())):
+    for i, (c, (label, timings)) in enumerate(zip("bcry", sorted(results.items())), start=1):
         ax = fig.add_subplot(2, 2, i, projection="3d")
         X, Y = np.meshgrid(samples_range, features_range)
         Z = np.asarray(timings).reshape(samples_range.shape[0], features_range.shape[0])
@@ -109,6 +108,4 @@ if __name__ == "__main__":
         ax.set_zlabel("Time (s)")
         ax.set_zlim3d(0.0, max_time * 1.1)
         ax.set_title(label)
-        # ax.legend()
-        i += 1
     plt.show()
