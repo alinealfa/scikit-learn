@@ -23,16 +23,9 @@ class PairwiseDistancesBenchmark(Benchmark):
             raise NotImplementedError
 
         if Benchmark.data_size == "large":
-            if metric in ("manhattan", "correlation"):
-                n_samples = 8000
-            else:
-                n_samples = 24000
+            n_samples = 8000 if metric in ("manhattan", "correlation") else 24000
         else:
-            if metric in ("manhattan", "correlation"):
-                n_samples = 4000
-            else:
-                n_samples = 12000
-
+            n_samples = 4000 if metric in ("manhattan", "correlation") else 12000
         data = _random_dataset(n_samples=n_samples, representation=representation)
         self.X, self.X_val, self.y, self.y_val = data
 

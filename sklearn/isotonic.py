@@ -225,7 +225,7 @@ class IsotonicRegression(RegressorMixin, TransformerMixin, BaseEstimator):
         self.out_of_bounds = out_of_bounds
 
     def _check_input_data_shape(self, X):
-        if not (X.ndim == 1 or (X.ndim == 2 and X.shape[1] == 1)):
+        if X.ndim != 1 and (X.ndim != 2 or X.shape[1] != 1):
             msg = (
                 "Isotonic regression input X should be a 1d array or "
                 "2d array with 1 feature"
@@ -242,11 +242,11 @@ class IsotonicRegression(RegressorMixin, TransformerMixin, BaseEstimator):
                 "'nan', 'clip', 'raise'; got {0}".format(self.out_of_bounds)
             )
 
-        bounds_error = self.out_of_bounds == "raise"
         if len(y) == 1:
             # single y, constant prediction
             self.f_ = lambda x: y.repeat(x.shape)
         else:
+            bounds_error = self.out_of_bounds == "raise"
             self.f_ = interpolate.interp1d(
                 X, y, kind="linear", bounds_error=bounds_error
             )
@@ -284,21 +284,21 @@ class IsotonicRegression(RegressorMixin, TransformerMixin, BaseEstimator):
         # Handle the left and right bounds on X
         self.X_min_, self.X_max_ = np.min(X), np.max(X)
 
-        if trim_duplicates:
-            # Remove unnecessary points for faster prediction
-            keep_data = np.ones((len(y),), dtype=bool)
-            # Aside from the 1st and last point, remove points whose y values
-            # are equal to both the point before and the point after it.
-            keep_data[1:-1] = np.logical_or(
-                np.not_equal(y[1:-1], y[:-2]), np.not_equal(y[1:-1], y[2:])
-            )
-            return X[keep_data], y[keep_data]
-        else:
+        if not trim_duplicates:
             # The ability to turn off trim_duplicates is only used to it make
             # easier to unit test that removing duplicates in y does not have
             # any impact the resulting interpolation function (besides
             # prediction speed).
             return X, y
+
+        # Remove unnecessary points for faster prediction
+        keep_data = np.ones((len(y),), dtype=bool)
+        # Aside from the 1st and last point, remove points whose y values
+        # are equal to both the point before and the point after it.
+        keep_data[1:-1] = np.logical_or(
+            np.not_equal(y[1:-1], y[:-2]), np.not_equal(y[1:-1], y[2:])
+        )
+        return X[keep_data], y[keep_data]
 
     def fit(self, X, y, sample_weight=None):
         """Fit the model using X, y as training data.

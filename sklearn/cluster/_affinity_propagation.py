@@ -429,10 +429,7 @@ class AffinityPropagation(ClusterMixin, BaseEstimator):
         self
 
         """
-        if self.affinity == "precomputed":
-            accept_sparse = False
-        else:
-            accept_sparse = "csr"
+        accept_sparse = False if self.affinity == "precomputed" else "csr"
         X = self._validate_data(X, accept_sparse=accept_sparse)
         if self.affinity == "precomputed":
             self.affinity_matrix_ = X

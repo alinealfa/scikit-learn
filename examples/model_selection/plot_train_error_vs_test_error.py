@@ -11,6 +11,7 @@ The example with an Elastic-Net regression model and the performance is
 measured using the explained variance a.k.a. R^2.
 
 """
+
 print(__doc__)
 
 # Author: Alexandre Gramfort <alexandre.gramfort@inria.fr>
@@ -37,7 +38,7 @@ y_train, y_test = y[:n_samples_train], y[n_samples_train:]
 alphas = np.logspace(-5, 1, 60)
 enet = linear_model.ElasticNet(l1_ratio=0.7, max_iter=10000)
 train_errors = list()
-test_errors = list()
+test_errors = []
 for alpha in alphas:
     enet.set_params(alpha=alpha)
     enet.fit(X_train, y_train)

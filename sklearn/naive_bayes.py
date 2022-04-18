@@ -531,11 +531,13 @@ class _BaseDiscreteNB(_BaseNB):
                 "Smoothing parameter alpha = %.1e. alpha should be > 0."
                 % np.min(self.alpha)
             )
-        if isinstance(self.alpha, np.ndarray):
-            if not self.alpha.shape[0] == self.n_features_in_:
-                raise ValueError(
-                    "alpha should be a scalar or a numpy array with shape [n_features]"
-                )
+        if (
+            isinstance(self.alpha, np.ndarray)
+            and self.alpha.shape[0] != self.n_features_in_
+        ):
+            raise ValueError(
+                "alpha should be a scalar or a numpy array with shape [n_features]"
+            )
         if np.min(self.alpha) < _ALPHA_MIN:
             warnings.warn(
                 "alpha too small will result in numeric errors, setting alpha = %.1e"
@@ -1342,22 +1344,22 @@ class CategoricalNB(_BaseDiscreteNB):
         # rely on max for n_categories categories are encoded between 0...n-1
         n_categories_X = X.max(axis=0) + 1
         min_categories_ = np.array(min_categories)
-        if min_categories is not None:
-            if not np.issubdtype(min_categories_.dtype, np.signedinteger):
-                raise ValueError(
-                    "'min_categories' should have integral type. Got "
-                    f"{min_categories_.dtype} instead."
-                )
-            n_categories_ = np.maximum(n_categories_X, min_categories_, dtype=np.int64)
-            if n_categories_.shape != n_categories_X.shape:
-                raise ValueError(
-                    f"'min_categories' should have shape ({X.shape[1]},"
-                    ") when an array-like is provided. Got"
-                    f" {min_categories_.shape} instead."
-                )
-            return n_categories_
-        else:
+        if min_categories is None:
             return n_categories_X
+
+        if not np.issubdtype(min_categories_.dtype, np.signedinteger):
+            raise ValueError(
+                "'min_categories' should have integral type. Got "
+                f"{min_categories_.dtype} instead."
+            )
+        n_categories_ = np.maximum(n_categories_X, min_categories_, dtype=np.int64)
+        if n_categories_.shape != n_categories_X.shape:
+            raise ValueError(
+                f"'min_categories' should have shape ({X.shape[1]},"
+                ") when an array-like is provided. Got"
+                f" {min_categories_.shape} instead."
+            )
+        return n_categories_
 
     def _count(self, X, Y):
         def _update_cat_count_dims(cat_count, highest_feature):
@@ -1370,10 +1372,7 @@ class CategoricalNB(_BaseDiscreteNB):
         def _update_cat_count(X_feature, Y, cat_count, n_classes):
             for j in range(n_classes):
                 mask = Y[:, j].astype(bool)
-                if Y.dtype.type == np.int64:
-                    weights = None
-                else:
-                    weights = Y[mask, j]
+                weights = None if Y.dtype.type == np.int64 else Y[mask, j]
                 counts = np.bincount(X_feature[mask], weights=weights)
                 indices = np.nonzero(counts)[0]
                 cat_count[j, indices] += counts[indices]
@@ -1405,5 +1404,4 @@ class CategoricalNB(_BaseDiscreteNB):
         for i in range(self.n_features_in_):
             indices = X[:, i]
             jll += self.feature_log_prob_[i][:, indices].T
-        total_ll = jll + self.class_log_prior_
-        return total_ll
+        return jll + self.class_log_prior_

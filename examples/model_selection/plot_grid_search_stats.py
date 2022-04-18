@@ -194,8 +194,7 @@ def corrected_std(differences, n_train, n_test):
     corrected_var = (
         np.var(differences, ddof=1) * (1 / kr + n_test / n_train)
     )
-    corrected_std = np.sqrt(corrected_var)
-    return corrected_std
+    return np.sqrt(corrected_var)
 
 
 def compute_corrected_ttest(differences, df, n_train, n_test):
@@ -461,7 +460,7 @@ for model_i, model_k in combinations(range(len(model_scores)), 2):
     )
     p_val *= n_comparisons  # implement Bonferroni correction
     # Bonferroni can output p-values higher than 1
-    p_val = 1 if p_val > 1 else p_val
+    p_val = min(p_val, 1)
     pairwise_t_test.append(
         [model_scores.index[model_i], model_scores.index[model_k],
          t_stat, p_val]

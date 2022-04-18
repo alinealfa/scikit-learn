@@ -27,9 +27,7 @@ def bench_sample(sampling, n_population, n_samples):
     t_start = datetime.now()
     sampling(n_population, n_samples)
     delta = datetime.now() - t_start
-    # stop time
-    time = compute_time(t_start, delta)
-    return time
+    return compute_time(t_start, delta)
 
 
 if __name__ == "__main__":
@@ -101,13 +99,12 @@ if __name__ == "__main__":
     # We assume that sampling algorithm has the following signature:
     #   sample(n_population, n_sample)
     #
-    sampling_algorithm = {}
+    sampling_algorithm = {
+        'python-core-sample': lambda n_population, n_sample: random.sample(
+            range(n_population), n_sample
+        )
+    }
 
-    ###########################################################################
-    # Set Python core input
-    sampling_algorithm[
-        "python-core-sample"
-    ] = lambda n_population, n_sample: random.sample(range(n_population), n_sample)
 
     ###########################################################################
     # Set custom automatic method selection

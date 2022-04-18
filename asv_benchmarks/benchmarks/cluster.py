@@ -19,19 +19,18 @@ class KMeansBenchmark(Predictor, Transformer, Estimator, Benchmark):
     def make_data(self, params):
         representation, algorithm, init = params
 
-        if representation == "sparse":
-            data = _20newsgroups_highdim_dataset(n_samples=8000)
-        else:
-            data = _blobs_dataset(n_clusters=20)
-
-        return data
+        return (
+            _20newsgroups_highdim_dataset(n_samples=8000)
+            if representation == "sparse"
+            else _blobs_dataset(n_clusters=20)
+        )
 
     def make_estimator(self, params):
         representation, algorithm, init = params
 
         max_iter = 30 if representation == "sparse" else 100
 
-        estimator = KMeans(
+        return KMeans(
             n_clusters=20,
             algorithm=algorithm,
             init=init,
@@ -40,8 +39,6 @@ class KMeansBenchmark(Predictor, Transformer, Estimator, Benchmark):
             tol=-1,
             random_state=0,
         )
-
-        return estimator
 
     def make_scorers(self):
         self.train_scorer = lambda _, __: neg_mean_inertia(
@@ -68,19 +65,18 @@ class MiniBatchKMeansBenchmark(Predictor, Transformer, Estimator, Benchmark):
     def make_data(self, params):
         representation, init = params
 
-        if representation == "sparse":
-            data = _20newsgroups_highdim_dataset()
-        else:
-            data = _blobs_dataset(n_clusters=20)
-
-        return data
+        return (
+            _20newsgroups_highdim_dataset()
+            if representation == "sparse"
+            else _blobs_dataset(n_clusters=20)
+        )
 
     def make_estimator(self, params):
         representation, init = params
 
         max_iter = 5 if representation == "sparse" else 2
 
-        estimator = MiniBatchKMeans(
+        return MiniBatchKMeans(
             n_clusters=20,
             init=init,
             n_init=1,
@@ -90,8 +86,6 @@ class MiniBatchKMeansBenchmark(Predictor, Transformer, Estimator, Benchmark):
             compute_labels=False,
             random_state=0,
         )
-
-        return estimator
 
     def make_scorers(self):
         self.train_scorer = lambda _, __: neg_mean_inertia(

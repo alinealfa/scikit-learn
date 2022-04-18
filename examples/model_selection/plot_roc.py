@@ -32,6 +32,7 @@ label.
              :ref:`sphx_glr_auto_examples_model_selection_plot_roc_crossval.py`
 
 """
+
 print(__doc__)
 
 import numpy as np
@@ -70,9 +71,9 @@ classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
 y_score = classifier.fit(X_train, y_train).decision_function(X_test)
 
 # Compute ROC curve and ROC area for each class
-fpr = dict()
-tpr = dict()
-roc_auc = dict()
+fpr = {}
+tpr = {}
+roc_auc = {}
 for i in range(n_classes):
     fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
     roc_auc[i] = auc(fpr[i], tpr[i])

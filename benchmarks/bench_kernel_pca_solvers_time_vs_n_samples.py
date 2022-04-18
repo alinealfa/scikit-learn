@@ -37,6 +37,7 @@ Finally you can have a look at the second example of this series, "Kernel PCA
 Solvers comparison benchmark: time vs n_components", where this time the number
 of examples is fixed, and the desired number of components varies.
 """
+
 # Author: Sylvain MARIE, Schneider Electric
 
 import time
@@ -59,9 +60,12 @@ n_samples_grid_size = 4  # nb of positions in the grid to try
 # generate the grid
 n_samples_range = [
     min_n_samples
-    + np.floor((x / (n_samples_grid_size - 1)) * (max_n_samples - min_n_samples))
-    for x in range(0, n_samples_grid_size)
+    + np.floor(
+        (x / (n_samples_grid_size - 1)) * (max_n_samples - min_n_samples)
+    )
+    for x in range(n_samples_grid_size)
 ]
+
 
 n_components = 100  # the number of principal components we want to use
 n_iter = 3  # the number of times each experiment will be repeated

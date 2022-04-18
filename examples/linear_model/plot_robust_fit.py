@@ -30,6 +30,7 @@ What we can see that:
 
 """
 
+
 from matplotlib import pyplot as plt
 import numpy as np
 
@@ -72,6 +73,7 @@ linestyle = {'OLS': '-', 'Theil-Sen': '-.', 'RANSAC': '--', 'HuberRegressor': '-
 lw = 3
 
 x_plot = np.linspace(X.min(), X.max())
+legend_title = 'Error of Mean\nAbsolute Deviation\nto Non-corrupt Data'
 for title, this_X, this_y in [
         ('Modeling Errors Only', X, y),
         ('Corrupt X, Small Deviants', X_errors, y),
@@ -89,7 +91,6 @@ for title, this_X, this_y in [
         plt.plot(x_plot, y_plot, color=colors[name], linestyle=linestyle[name],
                  linewidth=lw, label='%s: error = %.3f' % (name, mse))
 
-    legend_title = 'Error of Mean\nAbsolute Deviation\nto Non-corrupt Data'
     legend = plt.legend(loc='upper right', frameon=False, title=legend_title,
                         prop=dict(size='x-small'))
     plt.xlim(-4, 10.2)

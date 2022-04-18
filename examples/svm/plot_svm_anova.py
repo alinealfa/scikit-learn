@@ -8,6 +8,7 @@ SVC (support vector classifier) to improve the classification scores. We use
 the iris dataset (4 features) and add 36 non-informative features. We can find
 that our model achieves best performance when we select around 10% of features.
 """
+
 print(__doc__)
 
 import numpy as np
@@ -37,7 +38,7 @@ clf = Pipeline([('anova', SelectPercentile(chi2)),
 # #############################################################################
 # Plot the cross-validation score as a function of percentile of features
 score_means = list()
-score_stds = list()
+score_stds = []
 percentiles = (1, 3, 6, 10, 15, 20, 30, 40, 60, 80, 100)
 
 for percentile in percentiles:

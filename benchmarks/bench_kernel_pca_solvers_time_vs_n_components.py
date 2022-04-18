@@ -35,6 +35,7 @@ different range of values for `n_components`.
 You can also set `arpack_all=True` to activate arpack solver for large number
 of components (this takes more time).
 """
+
 # Authors: Sylvain MARIE, Schneider Electric
 
 import time
@@ -58,8 +59,9 @@ n_compo_grid_size = 10  # nb of positions in the grid to try
 # generate the grid
 n_compo_range = [
     np.round(np.exp((x / (n_compo_grid_size - 1)) * np.log(max_n_compo)))
-    for x in range(0, n_compo_grid_size)
+    for x in range(n_compo_grid_size)
 ]
+
 
 n_iter = 3  # the number of times each experiment will be repeated
 arpack_all = False  # set to True if you wish to run arpack for all n_compo

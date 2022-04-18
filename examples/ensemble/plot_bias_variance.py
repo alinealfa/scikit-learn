@@ -116,7 +116,7 @@ def generate(n_samples, noise, n_repeat=1):
 X_train = []
 y_train = []
 
-for i in range(n_repeat):
+for _ in range(n_repeat):
     X, y = generate(n_samples=n_train, noise=noise)
     X_train.append(X)
     y_train.append(y)

@@ -113,17 +113,15 @@ def one_run(n_samples):
         verbose=0,
     )
     loss = args.loss
-    if args.problem == "classification":
-        if loss == "default":
+    if loss == "default":
+        if args.problem == "classification":
             # loss='auto' does not work with get_equivalent_estimator()
             loss = (
                 "binary_crossentropy"
                 if args.n_classes == 2
                 else "categorical_crossentropy"
             )
-    else:
-        # regression
-        if loss == "default":
+        else:
             loss = "squared_error"
     est.set_params(loss=loss)
     est.fit(X_train, y_train, sample_weight=sample_weight_train)

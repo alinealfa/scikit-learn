@@ -226,13 +226,9 @@ class TweedieDistribution(ExponentialDispersionModel):
         elif 1 <= power < 2:
             # Poisson or Compound Poisson distribution
             self._lower_bound = DistributionBoundary(0, inclusive=True)
-        elif power >= 2:
+        else:
             # Gamma, Positive Stable, Inverse Gaussian distributions
             self._lower_bound = DistributionBoundary(0, inclusive=False)
-        else:  # pragma: no cover
-            # this branch should be unreachable.
-            raise ValueError
-
         self._power = power
 
     def unit_variance(self, y_pred):

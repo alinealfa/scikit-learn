@@ -70,9 +70,8 @@ def best_low_complexity(cv_results):
     """
     threshold = lower_bound(cv_results)
     candidate_idx = np.flatnonzero(cv_results['mean_test_score'] >= threshold)
-    best_idx = candidate_idx[cv_results['param_reduce_dim__n_components']
+    return candidate_idx[cv_results['param_reduce_dim__n_components']
                              [candidate_idx].argmin()]
-    return best_idx
 
 
 pipe = Pipeline([

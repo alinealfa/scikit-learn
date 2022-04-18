@@ -72,10 +72,7 @@ def _fit_binary(estimator, X, y, classes=None):
     unique_y = np.unique(y)
     if len(unique_y) == 1:
         if classes is not None:
-            if y[0] == -1:
-                c = 0
-            else:
-                c = y[0]
+            c = 0 if y[0] == -1 else y[0]
             warnings.warn(
                 "Label %s is present in all training examples." % str(classes[c])
             )

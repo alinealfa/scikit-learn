@@ -17,12 +17,8 @@ def raise_build_error(e):
     # Raise a comprehensible error and list the contents of the
     # directory to help debugging on the mailing list.
     local_dir = os.path.split(__file__)[0]
-    msg = STANDARD_MSG
-    if local_dir == "sklearn/__check_build":
-        # Picking up the local install: this will work only if the
-        # install is an 'inplace build'
-        msg = INPLACE_MSG
-    dir_content = list()
+    msg = INPLACE_MSG if local_dir == "sklearn/__check_build" else STANDARD_MSG
+    dir_content = []
     for i, filename in enumerate(os.listdir(local_dir)):
         if (i + 1) % 3:
             dir_content.append(filename.ljust(26))

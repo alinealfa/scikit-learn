@@ -67,17 +67,15 @@ class SequenceKernel(GenericKernelMixin, Kernel):
         '''
         kernel value between a pair of sequences
         '''
-        return sum([1.0 if c1 == c2 else self.baseline_similarity
-                   for c1 in s1
-                   for c2 in s2])
+        return sum(
+            1.0 if c1 == c2 else self.baseline_similarity for c1 in s1 for c2 in s2
+        )
 
     def _g(self, s1, s2):
         '''
         kernel derivative between a pair of sequences
         '''
-        return sum([0.0 if c1 == c2 else 1.0
-                    for c1 in s1
-                    for c2 in s2])
+        return sum(0.0 if c1 == c2 else 1.0 for c1 in s1 for c2 in s2)
 
     def __call__(self, X, Y=None, eval_gradient=False):
         if Y is None:

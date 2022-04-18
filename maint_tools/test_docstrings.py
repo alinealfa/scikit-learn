@@ -267,18 +267,18 @@ def repr_errors(res, estimator=None, method: Optional[str] = None) -> str:
         obj_signature = ""
         obj_name = method
 
-    msg = "\n\n" + "\n\n".join(
+    return "\n\n" + "\n\n".join(
         [
             str(res["file"]),
             obj_name + str(obj_signature),
             res["docstring"],
             "# Errors",
             "\n".join(
-                " - {}: {}".format(code, message) for code, message in res["errors"]
+                " - {}: {}".format(code, message)
+                for code, message in res["errors"]
             ),
         ]
     )
-    return msg
 
 
 @pytest.mark.parametrize("Estimator, method", get_all_methods())

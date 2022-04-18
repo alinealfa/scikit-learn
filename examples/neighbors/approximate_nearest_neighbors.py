@@ -111,11 +111,9 @@ class NMSlibTransformer(TransformerMixin, BaseEstimator):
 
         indptr = np.arange(0, n_samples_transform * n_neighbors + 1,
                            n_neighbors)
-        kneighbors_graph = csr_matrix((distances.ravel(), indices.ravel(),
+        return csr_matrix((distances.ravel(), indices.ravel(),
                                        indptr), shape=(n_samples_transform,
                                                        self.n_samples_fit_))
-
-        return kneighbors_graph
 
 
 class AnnoyTransformer(TransformerMixin, BaseEstimator):
@@ -169,11 +167,9 @@ class AnnoyTransformer(TransformerMixin, BaseEstimator):
 
         indptr = np.arange(0, n_samples_transform * n_neighbors + 1,
                            n_neighbors)
-        kneighbors_graph = csr_matrix((distances.ravel(), indices.ravel(),
+        return csr_matrix((distances.ravel(), indices.ravel(),
                                        indptr), shape=(n_samples_transform,
                                                        self.n_samples_fit_))
-
-        return kneighbors_graph
 
 
 def test_transformers():

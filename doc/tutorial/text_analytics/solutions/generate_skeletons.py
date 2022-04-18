@@ -1,4 +1,5 @@
 """Generate skeletons from the example code"""
+
 import os
 
 exercise_dir = os.path.dirname(__file__)
@@ -21,18 +22,15 @@ for f in solutions:
     print("Generating skeleton for %s" % f)
 
     input_file = open(os.path.join(exercise_dir, f))
-    output_file = open(os.path.join(skeleton_dir, f), 'w')
+    with open(os.path.join(skeleton_dir, f), 'w') as output_file:
+        in_exercise_region = False
 
-    in_exercise_region = False
+        for line in input_file:
+            linestrip = line.strip()
+            if len(linestrip) == 0:
+                in_exercise_region = False
+            elif linestrip.startswith('# TASK:'):
+                in_exercise_region = True
 
-    for line in input_file:
-        linestrip = line.strip()
-        if len(linestrip) == 0:
-            in_exercise_region = False
-        elif linestrip.startswith('# TASK:'):
-            in_exercise_region = True
-
-        if not in_exercise_region or linestrip.startswith('#'):
-            output_file.write(line)
-
-    output_file.close()
+            if not in_exercise_region or linestrip.startswith('#'):
+                output_file.write(line)

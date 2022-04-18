@@ -17,7 +17,7 @@ def compute_bench(samples_range, features_range):
 
     it = 0
 
-    results = dict()
+    results = {}
     lars = np.empty((len(features_range), len(samples_range)))
     lars_gram = lars.copy()
     omp = lars.copy()

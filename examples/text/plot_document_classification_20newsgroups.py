@@ -109,13 +109,9 @@ else:
         'sci.space',
     ]
 
-if opts.filtered:
-    remove = ('headers', 'footers', 'quotes')
-else:
-    remove = ()
-
+remove = ('headers', 'footers', 'quotes') if opts.filtered else ()
 print("Loading 20 newsgroups dataset for categories:")
-print(categories if categories else "all")
+print(categories or "all")
 
 data_train = fetch_20newsgroups(subset='train', categories=categories,
                                 shuffle=True, random_state=42,
@@ -171,11 +167,7 @@ print("n_samples: %d, n_features: %d" % X_test.shape)
 print()
 
 # mapping from integer feature name to original token string
-if opts.use_hashing:
-    feature_names = None
-else:
-    feature_names = vectorizer.get_feature_names()
-
+feature_names = None if opts.use_hashing else vectorizer.get_feature_names()
 if opts.select_chi2:
     print("Extracting %d best features by a chi-squared test" %
           opts.select_chi2)
